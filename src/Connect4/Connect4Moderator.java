@@ -1,16 +1,51 @@
 package Connect4;
 
+import java.util.ArrayList;
+
 public class Connect4Moderator {
 
     private char[][] board;
     private int turnNo;
     private int humanPlayers;
-    public Group[] groups = new Group[69];
+    ArrayList<Group> groups = new ArrayList<Group>(69);
 
     Connect4Player player1;
     Connect4Player player2;
 
     public Connect4Moderator(char[][] board, int hP) {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                /*
+                start @ i,j
+
+
+                if i + 3 * incrementH <= boardH, j + 3 * incrementV <= boardY
+                    create new group from i,j with increment boardH, boardY
+
+                possible directions are: diagonal right, right, diagonal down, down
+
+                respective increment pairs are: -1, +1; 0, +1; +1, +1; +1, 0;
+
+                */
+                //Check right diagonals (increment -1, +1)
+                if(i + -3 <= 6 && j + 3 <= 5) {
+                    groups.add(new Group(this, -1, 1, i, j));
+                }
+                //Check right (increment 0, +1)
+                if(i <= 6 && j + 3 <= 5) {
+                    groups.add(new Group(this, 0, 1, i, j));
+                }
+                //Check diagonal down (increment +1, +1)
+                if(i + 3 <= 6 && j + 3 <= 5) {
+                    groups.add(new Group(this, 1, 1, i, j));
+                }
+                //Check right (increment 0, +1)
+                if(i + 3 <= 6 && j <= 5) {
+                    groups.add(new Group(this, 1, 0, i, j));
+                }
+
+            }
+        }
         this.board = board;
         turnNo = 0;
         this.humanPlayers = hP;

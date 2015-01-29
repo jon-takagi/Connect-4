@@ -16,9 +16,16 @@ public class Group {
         this.startY = startY;
 
         for (int i = 0; i < values.length; i++) {
-            values[i] =  mod.getBoard()[startX + i * incrementX][startY + i * incrementY];
+            values[i] = 'X';
+            mod.getBoard();
+            System.out.println(mod.getBoard());
+//            values[i] = mod.getBoard()[startX + i * incrementX][startY + i * incrementY];
         }
 
+    }
+
+    public String getLocation() {
+        return "[" + startY + "][" + startX + "] to [" + (3 * incrementY + startY) + "][" + (3 * incrementY + startY) + "]";
     }
 
     public int getDangerous() {
