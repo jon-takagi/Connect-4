@@ -1,11 +1,13 @@
 package Connect4;
 
+import javafx.scene.paint.Color;
+
 /**
  * Created by 40095 on 1/24/15.
  */
 public class SmartAi extends Connect4Player {
 
-    public SmartAi(Connect4Moderator mod, char token) {
+    public SmartAi(Connect4Moderator mod, Color token) {
         super(mod, token);
     }
 
@@ -15,7 +17,7 @@ public class SmartAi extends Connect4Player {
         while (!isValid) {
             col = (int) (Math.random() * 6);
             for (int i = 5; i > 0; i--) {
-                if (board[i][col] != '.') {
+                if (!board[i][col].equals(Color.WHITE)) {
                     isValid = true;
                 }
             }
@@ -24,34 +26,26 @@ public class SmartAi extends Connect4Player {
     }
 
     private int winningCol() {
-        Connect4Moderator tester;
-        for (int i = 0; i < 7; i++) {
-            tester = new Connect4Moderator(mod.cloneBoard());
-            tester.dropToken(i);
-            if (tester.getWinner() == token) {
-                return i;
-            }
-        }
         return -1;
     }
 
     private boolean isPlayable(int row, int col) {
         for (int i = 5; i >= 0; i--) {
-            if (board[i][col] == '.') {
+            if (!board[i][col].equals(Color.WHITE)) {
                 return i == row;
             }
         }
         return false;
     }
 
-    public void makePlay() {
+    public int makePlay() {
         if (winningCol() != -1) {
             System.out.println("ha");
-            mod.dropToken(winningCol());
+            return winningCol();
 
         } else {
             System.out.println("playing random");
-            mod.dropToken(randomPlay());
+            return randomPlay();
         }
     }
 }

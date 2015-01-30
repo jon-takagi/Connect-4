@@ -1,12 +1,14 @@
 package Connect4;
 
+import javafx.scene.paint.Color;
+
 /**
  * Created by 40095 on 1/27/15.
  */
 public class Group {
     Connect4Moderator mod;
     int startCol, startRow, dRow, dCol;
-    char[] values = new char[4];
+    Color[] values = new Color[4];
 
     public Group(Connect4Moderator mod, int startRow, int startCol, int dCol, int dRow) {
         this.mod = mod;
