@@ -5,27 +5,33 @@ package Connect4;
  */
 public class Group {
     Connect4Moderator mod;
-    int startX, startY, incrementX, incrementY;
+    int startCol, startRow, dRow, dCol;
     char[] values = new char[4];
 
-    public Group(Connect4Moderator mod, int incrementX, int incrementY, int startX, int startY) {
+    public Group(Connect4Moderator mod, int startRow, int startCol, int dCol, int dRow) {
         this.mod = mod;
-        this.incrementX = incrementX;
-        this.incrementY = incrementY;
-        this.startX = startX;
-        this.startY = startY;
+        this.dRow = dRow;
+        this.dCol = dCol;
+        this.startCol = startCol;
+        this.startRow = startRow;
+//        System.out.println("ΔX = " + dRow + " ΔY = " + dCol);
+//        System.out.println(getLocation());
 
         for (int i = 0; i < values.length; i++) {
-            values[i] = 'X';
-            mod.getBoard();
-            System.out.println(mod.getBoard());
-//            values[i] = mod.getBoard()[startX + i * incrementX][startY + i * incrementY];
+            int col = startCol + i * dCol;
+            int row = startRow + i * dRow;
+//            System.out.println("retrieving value: " + i);
+//            System.out.println("Row value: " + row);
+//            System.out.println("Col value: " + col);
+//            System.out.println(mod.getBoard()[row][col]);
+            values[i] = mod.getBoard()[row][col];
+//            System.out.println("value = " + values[i]);
         }
 
     }
 
     public String getLocation() {
-        return "[" + startY + "][" + startX + "] to [" + (3 * incrementY + startY) + "][" + (3 * incrementY + startY) + "]";
+        return "[" + startRow + "][" + startCol + "] to [" + (3 * dCol + startRow) + "][" + (3 * dCol + startRow) + "]";
     }
 
     public int getDangerous() {

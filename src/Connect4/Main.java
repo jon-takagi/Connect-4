@@ -11,6 +11,7 @@ public class Main {
                 test[j][k] = '.';
             }
         }
+
         Connect4Moderator moderator = new Connect4Moderator(test, 2);
         System.out.println(moderator.player1.getClass() + " is: " + moderator.player1.token);
         System.out.println(moderator.player2.getClass() + " is: " + moderator.player2.token);
@@ -18,7 +19,6 @@ public class Main {
 //            moderator.playGame();
 //        }
         moderator.printBoard();
-        System.out.println(moderator.groups.get(10).getLocation());
 
 
 //        System.out.println("The winner is: " + moderator.getWinner());

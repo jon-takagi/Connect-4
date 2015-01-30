@@ -1,5 +1,8 @@
 package Connect4;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 
 public class Connect4Moderator {
@@ -13,39 +16,12 @@ public class Connect4Moderator {
     Connect4Player player2;
 
     public Connect4Moderator(char[][] board, int hP) {
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length; j++) {
-                /*
-                start @ i,j
-
-
-                if i + 3 * incrementH <= boardH, j + 3 * incrementV <= boardY
-                    create new group from i,j with increment boardH, boardY
-
-                possible directions are: diagonal right, right, diagonal down, down
-
-                respective increment pairs are: -1, +1; 0, +1; +1, +1; +1, 0;
-
-                */
-                //Check right diagonals (increment -1, +1)
-                if(i + -3 <= 6 && j + 3 <= 5) {
-                    groups.add(new Group(this, -1, 1, i, j));
-                }
-                //Check right (increment 0, +1)
-                if(i <= 6 && j + 3 <= 5) {
-                    groups.add(new Group(this, 0, 1, i, j));
-                }
-                //Check diagonal down (increment +1, +1)
-                if(i + 3 <= 6 && j + 3 <= 5) {
-                    groups.add(new Group(this, 1, 1, i, j));
-                }
-                //Check right (increment 0, +1)
-                if(i + 3 <= 6 && j <= 5) {
-                    groups.add(new Group(this, 1, 0, i, j));
-                }
-
-            }
+        try {
+            System.setErr(new PrintStream(new FileOutputStream("errorFile.txt")));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
+
         this.board = board;
         turnNo = 0;
         this.humanPlayers = hP;
@@ -63,6 +39,55 @@ public class Connect4Moderator {
                 player2 = new Connect4UI(this, '0');
                 break;
         }
+//                    Initialize and place the groups
+        int[] dRows = {-1, 0, 1, 1};
+        int[] dCols = {1, 1, 1, 0};
+
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[0].length; j++) {
+                /*
+                start @ i,j
+
+                if 0 < i + 3 * dCol <= board[0].length, 0 < j + 3 * dRow <= board.length
+                    create new group from i,j with specified increment pair
+
+                possible directions are: diagonal up, right, diagonal down, down
+                / -1 row +1 col
+                > 0 row +1 col
+                \ +1 row +1 col
+                | +1 row 0 col
+                    */
+
+
+                int fRow, fCol;
+                for (int k = 0; k < dRows.length; k++) {
+                    fRow = i + 3 * dRows[k];
+                    fCol = j + 3 * dCols[k];
+
+                    switch (k) {
+                        case 0:
+                            System.out.print("/ ");
+                            break;
+                        case 1:
+                            System.out.print("> ");
+                            break;
+                        case 2:
+                            System.out.print("\\ ");
+                            break;
+                        case 3:
+                            System.out.print("| ");
+                            break;
+                    }
+                    if (fRow >= 0 && fRow < board.length && fCol >= 0 && fCol < board[0].length) {
+//                        System.out.println("Group: [" + j + "][" + i + "] to [" + fRow + "][" + fCol + "] is possible");
+                        groups.add(new Group(this, i, j, dCols[k], dRows[k]));
+                    }
+                }
+
+
+            }
+        }
+
     }
 
     public Connect4Moderator(char[][] board) {
@@ -158,17 +183,18 @@ public class Connect4Moderator {
     }
 
     public void printBoard() {
-        System.out.println("  a b c d e f g");
+//        System.out.println("  a b c d e f g");
         for (int i = 0; i < board.length; i++) {
 
-            System.out.print((6 - i) + " ");
+//            System.out.print((6 - i) + " ");
             for (int j = 0; j < board[0].length; j++) {
                 System.out.print(board[i][j] + " ");
             }
             System.out.print(" " + i);
             System.out.print("\n");
         }
-        System.out.println("  0 1 2 3 4 5 6");
+        System.out.println("0 1 2 3 4 5 6");
+//        System.out.println("  0 1 2 3 4 5 6");
     }
 
     public char[][] getBoard() {
@@ -192,9 +218,9 @@ public class Connect4Moderator {
     public char playGame() {
         while (getWinner() == '.') {
             player1.makePlay();
-            if(humanPlayers == 2)
+            if (humanPlayers == 2)
                 printBoard();
-            if(getWinner() != '.')
+            if (getWinner() != '.')
                 break;
             player2.makePlay();
         }
