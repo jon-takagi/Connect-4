@@ -12,21 +12,8 @@ public class RandomAI extends Connect4Player {
     }
 
     public int makePlay() {
+        System.out.println("making random play");
         return getRandomPlay();
     }
-
-    private int getRandomPlay() {
-        int col = 0;
-        boolean isValid = false;
-        while (!isValid) {
-            for (int i = 5; i > 0; i--) {
-                if (!board[i][col].equals(Color.WHITE)) {
-                    isValid = true;
-                }
-            }
-        }
-        return col;
-    }
-
 
 }

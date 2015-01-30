@@ -8,13 +8,14 @@ import java.util.Scanner;
  * Created by 40095 on 1/25/15.
  */
 public class Connect4UI extends Connect4Player {
+    Scanner keyboard;
 
     public Connect4UI(Connect4Moderator mod, Color token) {
         super(mod, token);
+        keyboard = new Scanner(System.in);
     }
 
     public int makePlay() {
-        Scanner keyboard = new Scanner(System.in);
         System.out.println("Enter the column a-g to play in");
         mod.printBoard();
         String col = keyboard.nextLine();

@@ -8,17 +8,28 @@ import javafx.scene.paint.Color;
 public abstract class Connect4Player {
     Connect4Moderator mod;
     Color[][] board;
-    int width;
-    int height;
     Color token;
 
     public Connect4Player(Connect4Moderator mod, Color token) {
         this.mod = mod;
         this.board = mod.getBoard();
-        height = board.length;
-        width = board[0].length;
         this.token = token;
     }
 
     public abstract int makePlay();
+
+    public boolean isValid(int col) {
+        return board[0][col].equals(Color.WHITE);
+
+    }
+
+    public int getRandomPlay() {
+        int col = (int) (Math.random() * 6);
+        boolean isValid = isValid(col);
+        while (!isValid) {
+            col = (int) (Math.random() * 6);
+            isValid = isValid(col);
+        }
+        return col;
+    }
 }

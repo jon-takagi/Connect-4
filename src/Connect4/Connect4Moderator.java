@@ -119,7 +119,11 @@ public class Connect4Moderator implements Connect4able {
     }
 
     public boolean hasWinner() {
-        return getWinner().equals(Color.WHITE);
+        return !getWinner().equals(Color.WHITE);
+    }
+
+    public void clear() {
+
     }
 
     private int checkAdjacent(int r, int c, int count, Color winner) {
@@ -144,10 +148,6 @@ public class Connect4Moderator implements Connect4able {
         }
 
         return -1;
-    }
-
-    public void clear() {
-
     }
 
     private int checkDown(int r, int c, int count, Color winner) {
@@ -230,13 +230,16 @@ public class Connect4Moderator implements Connect4able {
     }
 
     public Color playGame() {
-        System.out.println(!hasWinner());
+//        System.out.println(!hasWinner());
+        printBoard();
         while (!hasWinner()) {
             dropToken(player1.makePlay());
-            if (humanPlayers == 2)
+//            if (humanPlayers == 2)
                 printBoard();
-            if (getWinner().equals(Color.WHITE))
+            if (!getWinner().equals(Color.WHITE)) {
+                System.out.println("The winner is player 1");
                 break;
+            }
             dropToken(player2.makePlay());
         }
         return getWinner();

@@ -14,7 +14,7 @@ public class Main {
             }
         }
 
-        Connect4Moderator moderator = new Connect4Moderator(test, 2);
+        Connect4Moderator moderator = new Connect4Moderator(test, 0);
         System.out.println(moderator.player1.getClass() + " is: " + moderator.player1.token);
         System.out.println(moderator.player2.getClass() + " is: " + moderator.player2.token);
 //        moderator.printBoard();
