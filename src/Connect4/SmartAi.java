@@ -22,6 +22,10 @@ public class SmartAi extends Connect4Player implements Connect4AI {
         return board[row][col].equals(Color.WHITE) && !board[row + 1][col].equals(Color.WHITE);
     }
 
+    private int tilesBelowSpace(int row, int col) {
+        return -1;
+    }
+
     private int winningCol() {
 //        System.out.println(mod.getPlayer(2).getToken());
         myWinningGroups.clear();
