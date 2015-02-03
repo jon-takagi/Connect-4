@@ -8,12 +8,22 @@ import java.util.ArrayList;
  * Created by 40095 on 1/24/15.
  */
 public class SmartAi extends Connect4Player implements Connect4AI {
-    ArrayList<Group> myWinningGroups, opponentWinningGroups;
+    ArrayList<Group> winningGroups, losingGroups, futureThreats;
+
+    /*
+    Order of precedence for plays to make:
+    1) plays that make you win immediately
+    2) plays that keep you from losing immediately
+    3) random
+    do not make plays that make a dangerous group playable
+        if tiles below space = 1 don't do the thing
+     */
 
     public SmartAi(Connect4Moderator mod, Color token) {
         super(mod, token);
-        myWinningGroups = new ArrayList<Group>();
-        opponentWinningGroups = new ArrayList<Group>();
+        winningGroups = new ArrayList<Group>();
+        losingGroups = new ArrayList<Group>();
+        futureThreats = new ArrayList<Group>();
     }
 
     private boolean isPlayable(int row, int col) {
@@ -23,37 +33,50 @@ public class SmartAi extends Connect4Player implements Connect4AI {
     }
 
     private int tilesBelowSpace(int row, int col) {
-        return -1;
+        if (isPlayable(row, col))
+            return 0;
+        int count = 0;
+        for (int i = row; i < 5; i++) {
+            if (board[i][col].equals(Color.WHITE)) {
+                count++;
+            }
+        }
+        return count;
     }
 
     private int winningCol() {
 //        System.out.println(mod.getPlayer(2).getToken());
-        myWinningGroups.clear();
-        opponentWinningGroups.clear();
+        winningGroups.clear();
+        losingGroups.clear();
+
         for (int i = 0; i < mod.groups.size(); i++) {
-            if (mod.groups.get(i).getDangerous() != -1) {
-//                System.out.println(mod.groups.get(i).getCriticalColor());
-                if (mod.groups.get(i).getCriticalColor().equals(token)) {
-                    myWinningGroups.add(mod.groups.get(i));
-                }
-                if (!mod.groups.get(i).getCriticalColor().equals(Color.WHITE) && !mod.groups.get(i).getCriticalColor().equals(token)) {
-                    opponentWinningGroups.add(mod.groups.get(i));
+            if (mod.groups.get(i).getDangerous() != -1) {    //if the group is dangerous
+                if (!isPlayable(mod.groups.get(i).dangerousRow(), mod.groups.get(i).dangerousCol())) //if the group is not playable
+                    futureThreats.add(mod.groups.get(i));                                              //add it to "future threats"
+                else {
+                    //if the group is playable & dangerous decide if it will make me win or lose & put it in that group
+                    if (mod.groups.get(i).getCriticalColor().equals(token)) {
+                        winningGroups.add(mod.groups.get(i));
+                    }
+                    if (!mod.groups.get(i).getCriticalColor().equals(Color.WHITE) && !mod.groups.get(i).getCriticalColor().equals(token)) {
+                        losingGroups.add(mod.groups.get(i));
+                    }
                 }
             }
         }
 
-        System.out.println(opponentWinningGroups.size());
-        if (myWinningGroups.size() > 0)
-            return myWinningGroups.get(0).getDangerous() * myWinningGroups.get(0).dCol + myWinningGroups.get(0).startCol;
-        if (opponentWinningGroups.size() > 0)
-            return opponentWinningGroups.get(0).getDangerous() * opponentWinningGroups.get(0).dCol + opponentWinningGroups.get(0).startCol;
+        if (winningGroups.size() > 0) {
+            return winningGroups.get(0).dangerousCol();
+        }
+        if (losingGroups.size() > 0)
+            return losingGroups.get(0).dangerousCol();
         return -1;
     }
 
     public int makePlay() {
         if (winningCol() != -1) {
             System.out.println("Playing critical column");
-            if (myWinningGroups.size() == 0)
+            if (winningGroups.size() == 0)
                 System.out.println("Not on my watch");
             else
                 System.out.println("I win!");

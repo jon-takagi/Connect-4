@@ -32,6 +32,20 @@ public class Group {
         }
     }
 
+    public int dangerousRow() {
+        if (getDangerous() == -1)
+            return -1;
+        else
+            return getDangerous() * dRow + startRow;
+    }
+
+    public int dangerousCol() {
+        if (getDangerous() == -1)
+            return -1;
+        else
+            return getDangerous() * dCol + startCol;
+    }
+
     public boolean isFull() {
         return values[0].equals(values[1]) && values[2].equals(values[3]) && values[1].equals(values[2]);
     }

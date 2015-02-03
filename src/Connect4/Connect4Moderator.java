@@ -83,6 +83,7 @@ public class Connect4Moderator implements Connect4able {
                     if (fRow >= 0 && fRow <= board.length - 1 && fCol >= 0 && fCol <= board[0].length - 1) {
 //                        System.out.println("Group: [" + j + "][" + i + "] to [" + fRow + "][" + fCol + "] is possible");
                         groups.add(new Group(this, i, j, dCols[k], dRows[k]));
+
                     }
                 }
 
@@ -177,8 +178,8 @@ public class Connect4Moderator implements Connect4able {
     }
 
     public Color playGame() {
+//        printBoard();
         while (getWinner().equals(Color.WHITE)) {
-//            System.out.println(getWinner());
             dropToken(player1.getMove(board));
             if (humanPlayers == 2)
                 printBoard();
