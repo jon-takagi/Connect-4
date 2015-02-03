@@ -13,16 +13,19 @@ public class Main {
                 test[j][k] = Color.WHITE;
             }
         }
+//        test[5][0] = Color.RED;
+//        test[4][0] = Color.RED;
+//        test[3][0] = Color.RED;
+//        test[5][1] = Color.RED;
+//        test[5][2] = Color.RED;
 
-        Connect4Moderator moderator = new Connect4Moderator(test, 0);
-        System.out.println(moderator.player1.getClass() + " is: " + moderator.player1.token);
-        System.out.println(moderator.player2.getClass() + " is: " + moderator.player2.token);
-//        moderator.printBoard();
+        Connect4Moderator moderator = new Connect4Moderator(test, 2);
+        System.out.println(moderator.player1.getClass() + " is: " + moderator.player1.token.toString() + "; Red / R");
+        System.out.println(moderator.player2.getClass() + " is: " + moderator.player2.token.toString() + "; Yellow / Y");
+
         moderator.playGame();
+
+        System.out.println("The winner is: " + moderator.getWinner());
         moderator.printBoard();
-
-
-//        System.out.println("The winner is: " + moderator.getWinner());
-
     }
 }
