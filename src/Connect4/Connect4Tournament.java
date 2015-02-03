@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
  */
 public class Connect4Tournament {
     public static void main(String[] args) {
-        int games = 10000;
+        int games = 10;
         Color[][][] test = new Color[games][6][7];
         for (int i = 0; i < games; i++) {
             for (int j = 0; j < test[0].length; j++) {

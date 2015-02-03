@@ -30,7 +30,7 @@ public class Connect4Moderator implements Connect4able {
         this.humanPlayers = hP;
         switch (humanPlayers) {
             case 0:
-                player1 = new SmartAi(this, Color.RED);
+                player1 = new RandomAI(this, Color.RED);
                 player2 = new SmartAi(this, Color.YELLOW);
                 break;
             case 1:
