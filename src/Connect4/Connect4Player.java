@@ -21,7 +21,6 @@ public abstract class Connect4Player implements Connect4AI {
 
     public boolean isValid(int col) {
         return board[0][col].equals(Color.WHITE);
-
     }
 
     public int getRandomPlay() {

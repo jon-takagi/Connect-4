@@ -23,6 +23,4 @@ public class Connect4UI extends Connect4Player {
         return c;
     }
 
-
-
 }

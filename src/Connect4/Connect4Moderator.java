@@ -190,5 +190,4 @@ public class Connect4Moderator implements Connect4able {
         }
         return getWinner();
     }
-
 }

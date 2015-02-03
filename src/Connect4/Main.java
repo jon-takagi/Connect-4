@@ -15,16 +15,16 @@ public class Main {
         }
 //        test[5][0] = Color.RED;
 //        test[5][5] = Color.YELLOW;
-        test[5][4] = Color.RED;
-        test[5][3] = Color.YELLOW;
-        test[5][2] = Color.RED;
-        test[4][2] = Color.RED;
-        test[4][3] = Color.RED;
-        test[4][4] = Color.RED;
-        System.out.println(test.length);
+//        test[5][4] = Color.RED;
+//        test[5][3] = Color.YELLOW;
+//        test[5][2] = Color.RED;
+//        test[4][2] = Color.RED;
+//        test[4][3] = Color.RED;
+//        test[4][4] = Color.RED;
+//        System.out.println(test.length);
 
 
-        Connect4Moderator moderator = new Connect4Moderator(test, 1);
+        Connect4Moderator moderator = new Connect4Moderator(test, 2);
         System.out.println(moderator.player1.getClass() + " is: " + moderator.player1.token.toString() + "; Red / R");
         System.out.println(moderator.player2.getClass() + " is: " + moderator.player2.token.toString() + "; Yellow / Y");
 

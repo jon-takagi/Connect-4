@@ -17,6 +17,9 @@ public class SmartAi extends Connect4Player implements Connect4AI {
     3) random
     do not make plays that make a dangerous group playable
         if tiles below space = 1 don't do the thing
+
+        for each future threat, check if playing in that column is viable
+        put viable columns in a list, pick from them randomly
      */
 
     public SmartAi(Connect4Moderator mod, Color token) {
@@ -85,5 +88,27 @@ public class SmartAi extends Connect4Player implements Connect4AI {
             System.out.println("playing random");
             return getRandomPlay();
         }
+    }
+
+    @Override
+    public int getRandomPlay() {
+        int col = (int) (Math.random() * 6);
+        boolean isValid = isValid(col);
+        boolean isViable = false;
+        for (int i = 0; i < futureThreats.size(); i++) {
+            if (tilesBelowSpace(futureThreats.get(i).dangerousRow(), futureThreats.get(i).dangerousCol()) % 2 == 0) {
+                isViable = true;
+            }
+        }
+        while (!isValid && !isViable) {
+            col = (int) (Math.random() * 6);
+            isValid = isValid(col);
+            for (int i = 0; i < futureThreats.size(); i++) {
+                if (tilesBelowSpace(futureThreats.get(i).dangerousRow(), futureThreats.get(i).dangerousCol()) % 2 == 0) {
+                    isViable = true;
+                }
+            }
+        }
+        return col;
     }
 }
