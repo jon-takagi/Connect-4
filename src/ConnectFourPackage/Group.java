@@ -1,4 +1,4 @@
-package Connect4;
+package ConnectFourPackage;
 
 import javafx.scene.paint.Color;
 
@@ -6,12 +6,12 @@ import javafx.scene.paint.Color;
  * Created by 40095 on 1/27/15.
  */
 public class Group {
-    Connect4Moderator mod;
     int startCol, startRow, dRow, dCol;
     Color[] values = new Color[4];
+    Color[][] board;
 
-    public Group(Connect4Moderator mod, int startRow, int startCol, int dCol, int dRow) {
-        this.mod = mod;
+    public Group(Color[][] board, int startRow, int startCol, int dCol, int dRow) {
+        this.board = board;
         this.dRow = dRow;
         this.dCol = dCol;
         this.startCol = startCol;
@@ -28,7 +28,7 @@ public class Group {
         for (int i = 0; i < values.length; i++) {
             int col = startCol + i * dCol;
             int row = startRow + i * dRow;
-            values[i] = mod.getBoard()[row][col];
+            values[i] = board[row][col];
         }
     }
 
@@ -46,8 +46,29 @@ public class Group {
             return getDangerous() * dCol + startCol;
     }
 
+    public boolean contains(Color c) {
+        fillValues();
+        boolean b = false;
+        for (Color value : values) {
+            b = b || value.equals(c);
+        }
+        return b;
+    }
+
+    public boolean doesNotContain(Color c) {
+        fillValues();
+        boolean b = !values[0].equals(c);
+        for (Color value : values) {
+            b = b && !value.equals(c);
+
+        }
+        return b;
+
+    }
+
     public boolean isFull() {
-        return values[0].equals(values[1]) && values[2].equals(values[3]) && values[1].equals(values[2]);
+        fillValues();
+        return values[0].equals(values[1]) && values[1].equals(values[2]) && values[2].equals(values[3]);
     }
 
     public Color getFullColor() {

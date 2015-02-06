@@ -1,4 +1,4 @@
-package Connect4;
+package ConnectFourPackage;
 
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -7,14 +7,11 @@ import javafx.scene.paint.Color;
  * Created by 40095 on 1/25/15.
  */
 public abstract class Connect4Player implements Connect4AI {
-    Connect4Moderator mod;
+    //    Connect4Moderator mod;
     Color[][] board;
     Color token;
 
-    public Connect4Player(Connect4Moderator mod, Color token) {
-        this.mod = mod;
-        this.board = mod.getBoard();
-        this.token = token;
+    public Connect4Player() {
     }
 
     public abstract int makePlay();
@@ -33,8 +30,9 @@ public abstract class Connect4Player implements Connect4AI {
         return col;
     }
 
-    public int getMove(Color[][] board) {
+    public int getMove(Color[][] board, Color me) {
         this.board = board;
+        token = me;
         return makePlay();
     }
 

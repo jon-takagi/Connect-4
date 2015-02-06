@@ -1,6 +1,4 @@
-package Connect4;
-
-import javafx.scene.paint.Color;
+package ConnectFourPackage;
 
 import java.util.Scanner;
 
@@ -10,14 +8,12 @@ import java.util.Scanner;
 public class Connect4UI extends Connect4Player {
     Scanner keyboard;
 
-    public Connect4UI(Connect4Moderator mod, Color token) {
-        super(mod, token);
+    public Connect4UI() {
         keyboard = new Scanner(System.in);
     }
 
     public int makePlay() {
         System.out.println("Enter the column a-g to play in");
-        mod.printBoard();
         String col = keyboard.nextLine();
         int c = Character.getNumericValue(col.charAt(0)) - 10;
         return c;

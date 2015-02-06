@@ -1,15 +1,18 @@
-package Connect4;
+package ConnectFourPackage;
 
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
-public class Connect4Moderator implements Connect4able {
+public class Connect4Moderator {
 
     private Color[][] board;
+    private int[] lastPlay = new int[2];
     private int turnNo;
     private int humanPlayers;
     ArrayList<Group> groups = new ArrayList<Group>(69);
+    Group winningGroup;
+
 
     Connect4Player player1;
     Connect4Player player2;
@@ -25,23 +28,30 @@ public class Connect4Moderator implements Connect4able {
 //            e.printStackTrace();
 //        }
 
+
         this.board = board;
         turnNo = 0;
         this.humanPlayers = hP;
         switch (humanPlayers) {
             case 0:
-                player1 = new RandomAI(this, Color.RED);
-                player2 = new SmartAi(this, Color.YELLOW);
+                player1 = new RandomAI();
+                player2 = new SmartAi();
                 break;
             case 1:
-                player1 = new Connect4UI(this, Color.RED);
-                player2 = new SmartAi(this, Color.YELLOW);
+                player1 = new Connect4UI();
+                player2 = new SmartAi();
                 break;
             case 2:
-                player1 = new Connect4UI(this, Color.RED);
-                player2 = new Connect4UI(this, Color.YELLOW);
+                player1 = new Connect4UI();
+                player2 = new Connect4UI();
                 break;
         }
+        getGroups();
+
+    }
+
+    private void getGroups() {
+
 //                    Initialize and place the groups
         int[] dRows = {-1, 0, 1, 1};
         int[] dCols = {1, 1, 1, 0};
@@ -82,7 +92,7 @@ public class Connect4Moderator implements Connect4able {
 //                    }
                     if (fRow >= 0 && fRow <= board.length - 1 && fCol >= 0 && fCol <= board[0].length - 1) {
 //                        System.out.println("Group: [" + j + "][" + i + "] to [" + fRow + "][" + fCol + "] is possible");
-                        groups.add(new Group(this, i, j, dCols[k], dRows[k]));
+                        groups.add(new Group(board, i, j, dCols[k], dRows[k]));
 
                     }
                 }
@@ -90,71 +100,51 @@ public class Connect4Moderator implements Connect4able {
 
             }
         }
-
     }
 
     /**
      * @return the Color of the token being used by the winner. Returns Color.White if no winner yet exists
      */
     public Color getWinner() {
-        for (int i = 0; i < groups.size(); i++) {
-            if (groups.get(i).isFull() && !groups.get(i).getFullColor().equals(Color.WHITE))
-                return groups.get(i).getFullColor();
+        for (Group group : groups) {
+//            System.out.println("groups " + i + " isFull = " + groups.get(i).isFull());
+            if (group.isFull() && !group.getFullColor().equals(Color.WHITE)) {
+                winningGroup = group;
+                return group.getFullColor();
+            }
         }
         return Color.WHITE;
     }
 
-    @Override
-    /**
-     * returns whether the game is over or not
-     */
-    public boolean isGameOver() {
-        return turnNo > 42;
-    }
-
-    /**
-     * @return the Color of the player currently playing
-     */
-    @Override
-    public Color currentPlayer() {
-        if (turnNo % 2 == 0)
-            return Color.YELLOW;
-        return Color.RED;
-    }
-
-    /**
-     * @return whether the winner of the game is one of the players, rather than white
-     */
-    public boolean hasWinner() {
-        return !getWinner().equals(Color.WHITE);
-    }
-
-    /**
-     * does nothing
-     */
-    public void clear() {
-
-    }
-
-
     public void printBoard() {
-        System.out.println("  a b c d e f g");
+        System.out.println("turnNo = " + turnNo);
+//        System.out.println("  a b c d e f g");
         for (int i = 0; i < board.length; i++) {
 
-            System.out.print((6 - i) + " ");
+//            System.out.print((6 - i) + " ");
             for (int j = 0; j < board[0].length; j++) {
                 if (board[i][j].equals(Color.WHITE))
                     System.out.print(". ");
-                if (board[i][j].equals(Color.RED))
-                    System.out.print("R ");
-                if (board[i][j].equals(Color.YELLOW))
-                    System.out.print("Y ");
+                if (board[i][j].equals(Color.RED)) {
+                    if (i == lastPlay[0] && j == lastPlay[1])
+                        System.out.print("R ");
+                    else
+                        System.out.print("r ");
+                }
+                if (board[i][j].equals(Color.YELLOW)) {
+                    if (i == lastPlay[0] && j == lastPlay[1]) {
+
+                        System.out.print("Y ");
+                    } else {
+                        System.out.print("y ");
+                    }
+                }
             }
             System.out.print(" " + i);
             System.out.print("\n");
         }
-//        System.out.println("0 1 2 3 4 5 6");
-        System.out.println("  0 1 2 3 4 5 6");
+        System.out.println("0 1 2 3 4 5 6");
+//        System.out.println("  0 1 2 3 4 5 6");
     }
 
     public Color[][] getBoard() {
@@ -165,6 +155,8 @@ public class Connect4Moderator implements Connect4able {
         turnNo++;
         for (int i = 5; i >= 0; i--) {
             if (board[i][col].equals(Color.WHITE)) {
+                lastPlay[0] = i;
+                lastPlay[1] = col;
 //                board[i][col] = Color.YELLOW;
                 if (turnNo % 2 == 0) {
                     board[i][col] = Color.YELLOW;
@@ -174,20 +166,29 @@ public class Connect4Moderator implements Connect4able {
                     break;
                 }
             }
+
         }
     }
 
     public Color playGame() {
-//        printBoard();
+//        System.out.println(player1.getClass() + "  is " + Color.RED +" / RED (R)");
+//        System.out.println(player2.getClass() + " is "  + Color.YELLOW + " / YELLOW (Y)");
         while (getWinner().equals(Color.WHITE)) {
-            dropToken(player1.getMove(board));
+//            System.out.print("\nRED to move, ");
+            dropToken(player1.getMove(board, Color.RED));
+//            printBoard();
             if (humanPlayers == 2)
                 printBoard();
             if (!getWinner().equals(Color.WHITE)) {
                 return getWinner();
             }
-            dropToken(player2.getMove(board));
+//            System.out.print("\nYELLOW to move, ");
+            dropToken(player2.getMove(board, Color.YELLOW));
+//            printBoard();
+            if (turnNo > 42)
+                return Color.WHITE;
         }
+//        printBoard();
         return getWinner();
     }
 }
